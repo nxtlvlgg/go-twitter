@@ -144,6 +144,49 @@ type ListsOwnershipsParams struct {
 	FilterToOwnedLists *bool  `url:"filter_to_owned_lists,omitempty"`
 }
 
+// ListsMembershipsParams are the parameters for ListsService.Memberships
+type ListsShowParams struct {
+	ListID          int64  `url:"list_id,omitempty"`
+	Slug            string `url:"slug,omitempty"`
+	OwnerScreenName string `url:"owner_screen_name,omitempty"`
+	OwnerID         int64  `url:"owner_id,omitempty"`
+}
+
+//TODO: fix comment
+// Memberships returns the lists the specified user has been added to.
+// If user_id or screen_name are not provided the memberships for the authenticating user are returned.
+// https://developer.twitter.com/en/docs/accounts-and-users/create-manage-lists/api-reference/get-lists-memberships
+func (s *ListsService) Show(params *ListsShowParams) (*List, *http.Response, error) {
+	list := new(List)
+	apiError := new(APIError)
+	resp, err := s.sling.New().Get("show.json").QueryStruct(params).Receive(list, apiError)
+	return list, resp, relevantError(err, *apiError)
+}
+
+// ListsStatusesParams are the parameters for ListsService.Statuses
+type ListsStatusesParams struct {
+	ListID          int64  `url:"list_id,omitempty"`
+	Slug            string `url:"slug,omitempty"`
+	OwnerScreenName string `url:"owner_screen_name,omitempty"`
+	OwnerID         int64  `url:"owner_id,omitempty"`
+	SinceID         int64  `url:"since_id,omitempty"`
+	MaxID           int64  `url:"max_id,omitempty"`
+	Count           int    `url:"count,omitempty"`
+	IncludeEntities bool   `url:"include_entities,omitempty"`
+	IncludeRetweets bool   `url:"include_rts"`
+}
+
+//TODO: fix comment
+// Memberships returns the lists the specified user has been added to.
+// If user_id or screen_name are not provided the memberships for the authenticating user are returned.
+// https://developer.twitter.com/en/docs/accounts-and-users/create-manage-lists/api-reference/get-lists-memberships
+func (s *ListsService) Statuses(params *ListsStatusesParams) (*[]Tweet, *http.Response, error) {
+	list := new([]Tweet)
+	apiError := new(APIError)
+	resp, err := s.sling.New().Get("statuses.json").QueryStruct(params).Receive(list, apiError)
+	return list, resp, relevantError(err, *apiError)
+}
+
 /*
 TODO: Implement POST methods
 POST lists/members/create
