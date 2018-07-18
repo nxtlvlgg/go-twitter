@@ -38,7 +38,7 @@ func NewClient(httpClient *http.Client) *Client {
 		Followers:      newFollowerService(base.New()),
 		Friends:        newFriendService(base.New()),
 		Friendships:    newFriendshipService(base.New()),
-		Lists:          newListsService(base.New()),
+		Lists:          newListService(base.New()),
 		Search:         newSearchService(base.New()),
 		Statuses:       newStatusService(base.New()),
 		Streams:        newStreamService(httpClient, base.New()),
